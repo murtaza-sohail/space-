@@ -1,0 +1,195 @@
+.file-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.file-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: rgba(13, 13, 13, 0.2);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.file-list-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.view-controls {
+    display: flex;
+    gap: var(--spacing-xs);
+    background: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-300);
+}
+
+.view-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-xs);
+    color: var(--gray-600);
+    transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 5px var(--neon-magenta);
+}
+
+.view-btn.active {
+    background: rgba(0, 243, 255, 0.2);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.file-list {
+    flex: 1;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    position: relative;
+    background: transparent;
+}
+
+.file-list.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.file-list.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.file-list.drag-over {
+    background: rgba(0, 243, 255, 0.05);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--gray-500);
+    text-align: center;
+    padding: var(--spacing-2xl);
+}
+
+.empty-icon {
+    color: var(--neon-cyan);
+    margin-bottom: var(--spacing-lg);
+    filter: drop-shadow(0 0 10px var(--neon-cyan));
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: var(--neon-cyan);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+    color: var(--gray-400);
+}
+
+.drop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 243, 255, 0.05);
+    border: 2px dashed var(--neon-cyan);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.2);
+}
+
+.drop-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    color: var(--neon-cyan);
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px var(--neon-cyan);
+}
+
+/* Grid view specific styles */
+.file-list.grid .file-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-lg);
+    height: 100%;
+}
+
+.file-list.grid .file-item-main {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.file-list.grid .item-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-md);
+}
+
+.file-list.grid .item-thumbnail {
+    width: 140px;
+    height: 140px;
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+.file-list.grid .file-item-info {
+    align-items: center;
+    width: 100%;
+}
+
+.file-list.grid .action-menu-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+}
+
+@media (max-width: 768px) {
+    .file-list-header {
+        padding: var(--spacing-md);
+    }
+
+    .file-list-title {
+        font-size: 1rem;
+    }
+
+    .file-list {
+        padding: var(--spacing-md);
+    }
+
+    .file-list.grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--spacing-md);
+    }
+}

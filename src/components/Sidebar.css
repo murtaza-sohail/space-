@@ -1,0 +1,180 @@
+.sidebar {
+    width: 280px;
+    background: rgba(13, 13, 13, 0.6);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--neon-cyan);
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-lg);
+    box-shadow: 5px 0 15px rgba(0, 243, 255, 0.1);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.logo-icon {
+    color: var(--neon-cyan);
+    filter: drop-shadow(0 0 5px var(--neon-cyan));
+}
+
+.sidebar-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px var(--neon-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    color: var(--gray-600);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover {
+    background: rgba(255, 0, 255, 0.1);
+    color: var(--neon-magenta);
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+.nav-item.active {
+    background: rgba(0, 243, 255, 0.15);
+    color: var(--neon-cyan);
+    font-weight: 700;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: auto;
+    padding-bottom: var(--spacing-xl);
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn.primary {
+    background: transparent;
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    box-shadow: inset 0 0 5px var(--neon-cyan), 0 0 10px rgba(0, 243, 255, 0.3);
+}
+
+.action-btn.primary:hover {
+    background: var(--neon-cyan);
+    color: var(--cyber-black);
+    box-shadow: 0 0 20px var(--neon-cyan);
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+    background: transparent;
+    color: var(--neon-yellow);
+    border-color: var(--neon-yellow);
+    box-shadow: inset 0 0 5px var(--neon-yellow), 0 0 10px rgba(252, 238, 10, 0.2);
+}
+
+.action-btn.secondary:hover {
+    background: var(--neon-yellow);
+    color: var(--cyber-black);
+    box-shadow: 0 0 20px var(--neon-yellow);
+}
+
+.storage-info {
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.storage-watermark {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    opacity: 0.1;
+    pointer-events: none;
+    transform: rotate(-10deg);
+}
+
+.storage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.storage-label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+}
+
+.storage-used {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+}
+
+.storage-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.storage-fill {
+    height: 100%;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.storage-total {
+    font-size: 0.7rem;
+    color: var(--gray-400);
+    text-align: right;
+}

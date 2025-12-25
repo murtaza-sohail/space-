@@ -1,0 +1,294 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid var(--neon-cyan);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    animation: scanlineScroll 2s linear infinite;
+}
+
+@keyframes scanlineScroll {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.modal-small {
+    max-width: 400px;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--gray-300);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.close-btn {
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    color: var(--gray-500);
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.close-btn:hover {
+    background: rgba(255, 0, 255, 0.1);
+    color: var(--neon-magenta);
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 10px var(--neon-magenta);
+}
+
+.modal-body {
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-top: 1px solid var(--gray-300);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.btn:disabled {
+    opacity: 0.3;
+    filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: transparent;
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    box-shadow: inset 0 0 5px var(--neon-cyan), 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--neon-cyan);
+    color: var(--cyber-black);
+    box-shadow: 0 0 20px var(--neon-cyan);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--gray-500);
+    border-color: var(--gray-400);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gray-900);
+    border-color: var(--gray-900);
+}
+
+/* Upload Modal Specific */
+.upload-dropzone {
+    border: 1px dashed var(--neon-cyan);
+    background: rgba(0, 243, 255, 0.03);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.05);
+}
+
+.upload-dropzone:hover {
+    border-color: var(--neon-magenta);
+    background: rgba(255, 0, 255, 0.05);
+    box-shadow: inset 0 0 30px rgba(255, 0, 255, 0.1), 0 0 15px rgba(255, 0, 255, 0.2);
+}
+
+.upload-icon {
+    color: var(--neon-cyan);
+    margin-bottom: var(--spacing-md);
+    filter: drop-shadow(0 0 8px var(--neon-cyan));
+}
+
+.upload-text {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.upload-subtext {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+}
+
+.file-preview-list {
+    margin-top: var(--spacing-xl);
+}
+
+.file-preview-list h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-600);
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.file-preview-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 0;
+}
+
+.file-preview-name {
+    font-weight: 700;
+    color: var(--neon-cyan);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-preview-size {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.remove-file-btn {
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    color: var(--gray-500);
+    transition: all 0.2s;
+}
+
+.remove-file-btn:hover {
+    background: rgba(255, 49, 49, 0.1);
+    color: var(--error);
+}
+
+.upload-success {
+    color: #39ff14;
+    text-shadow: 0 0 10px #39ff14;
+}
+
+/* Folder Modal Specific */
+.folder-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    color: var(--gray-900);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.folder-input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--spacing-md);
+    }
+
+    .upload-dropzone {
+        padding: var(--spacing-xl);
+    }
+}
