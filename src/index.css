@@ -326,6 +326,16 @@ button {
     }
 }
 
+.spin-slow {
+    animation: spin 3s linear infinite;
+}
+
+.sync-status.active.saving {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 8px var(--neon-magenta);
+    animation: pulsate 0.5s infinite ease-in-out;
+}
+
 @keyframes pulsate {
     0% {
         transform: scale(1);

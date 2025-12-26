@@ -24,12 +24,20 @@ export const FileSystemProvider = ({ children, apiKey }) => {
     const [currentView, setCurrentView] = useState('files');
     const [searchQuery, setSearchQuery] = useState('');
     const [previewFile, setPreviewFile] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        if (fileSystem.files.length > 0 || fileSystem.folders.length > 0) {
+        const save = async () => {
+            setIsSaving(true);
+            // Simulate a brief cloud delay
+            await new Promise(resolve => setTimeout(resolve, 800));
             saveStorageData(fileSystem, user?.email);
-        }
+            setIsSaving(false);
+        };
+
+        save();
     }, [fileSystem, user]);
+
 
 
     useEffect(() => {
@@ -290,7 +298,9 @@ export const FileSystemProvider = ({ children, apiKey }) => {
         setSearchQuery,
         previewFile,
         setPreviewFile,
+        isSaving,
         createFolder,
+
         uploadFile,
         deleteItem,
         restoreItem,

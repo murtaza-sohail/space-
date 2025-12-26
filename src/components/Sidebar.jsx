@@ -5,7 +5,8 @@ import { Cloud, Home, Trash2, Upload, FolderPlus, Clock, Star } from 'lucide-rea
 import './Sidebar.css';
 
 const Sidebar = ({ setIsUploadOpen, setIsCreateFolderOpen, setIsLoginOpen, isOpen, onClose }) => {
-    const { usedStorage, currentView, setCurrentView, navigateToFolder, user, logout } = useFileSystem();
+    const { usedStorage, currentView, setCurrentView, navigateToFolder, user, logout, isSaving } = useFileSystem();
+
 
     const TOTAL_STORAGE = 10000 * 1024 * 1024 * 1024 * 1024;
     const percentage = getStoragePercentage(usedStorage);
@@ -104,11 +105,12 @@ const Sidebar = ({ setIsUploadOpen, setIsCreateFolderOpen, setIsLoginOpen, isOpe
                     </div>
                     <div className="storage-total">{formatBytes(TOTAL_STORAGE)} Total</div>
                     {user && (
-                        <div className="sync-status active">
-                            <Cloud size={14} />
-                            <span>Synced to Google Storage: {user.email}</span>
+                        <div className={`sync-status active ${isSaving ? 'saving' : ''}`}>
+                            <Cloud size={14} className={isSaving ? 'spin-slow' : ''} />
+                            <span>{isSaving ? 'Saving to Cloud...' : `Synced to Google Storage: ${user.email}`}</span>
                         </div>
                     )}
+
                 </div>
 
 
