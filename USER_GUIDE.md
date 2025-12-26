@@ -36,4 +36,4 @@ Every file and folder has immediate buttons available—no menus required!
 - **Linked State:** When you link a Google account, CloudVault switches to that account's specific cloud storage. Data you create while logged in is permanently tethered to that email.
 - **Auto-Unlinking:** Signing out "unlinks" your session, safely storing your cloud data and restoring your local guest view. Log back in at any time to instantly restore your cloud files!
 
-and
+se
