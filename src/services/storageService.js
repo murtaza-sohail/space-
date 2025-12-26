@@ -17,22 +17,22 @@ export const initStorage = (apiKey) => {
     }
 };
 
-export const getStorageData = () => {
-    const data = localStorage.getItem(STORAGE_KEY);
+export const getStorageData = (email = null) => {
+    const key = email ? `${STORAGE_KEY}_${email}` : STORAGE_KEY;
+    const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
 };
 
-export const saveStorageData = (data) => {
+export const saveStorageData = (data, email = null) => {
+    const key = email ? `${STORAGE_KEY}_${email}` : STORAGE_KEY;
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        console.log('Storage saved successfully:', data);
+        localStorage.setItem(key, JSON.stringify(data));
+        console.log(`Storage saved successfully for ${email || 'guest'}:`, data);
     } catch (e) {
         console.error('Failed to save to localStorage:', e);
-        if (e.name === 'QuotaExceededError') {
-            console.warn('LocalStorage quota exceeded. Data may not be fully persisted.');
-        }
     }
 };
+
 
 
 export const formatBytes = (bytes, decimals = 2) => {

@@ -31,4 +31,8 @@ Every file and folder has immediate buttons available—no menus required!
 *   **Empty Trash:** Click the red **"Empty Trash"** button at the top right of the Trash view to clear everything at once!
 
 ---
-**Note:** All your data and your "Logged In" status are saved permanently in your **GOOGLE storage** (the Google account you linked). Even if you refresh or switch devices, your CloudVault data remains synced and secure in the cloud!
+**Note:** CloudVault uses **Account-Specific Syncing**.
+- **Guest State:** When unlinked, your data is stored in your local guest profile.
+- **Linked State:** When you link a Google account, CloudVault switches to that account's specific cloud storage. Data you create while logged in is permanently tethered to that email.
+- **Auto-Unlinking:** Signing out "unlinks" your session, safely storing your cloud data and restoring your local guest view. Log back in at any time to instantly restore your cloud files!
+

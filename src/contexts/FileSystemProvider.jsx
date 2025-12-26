@@ -5,11 +5,20 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const FileSystemProvider = ({ children, apiKey }) => {
     const [user, setUser] = useState(() => getUserData());
-    const [fileSystem, setFileSystem] = useState(() => {
-        initStorage(apiKey);
-        const data = getStorageData();
-        return data ? { files: data.files || [], folders: data.folders || [] } : { files: [], folders: [] };
-    });
+    const [fileSystem, setFileSystem] = useState({ files: [], folders: [] });
+
+    // Initial load and account switching
+    useEffect(() => {
+        const data = getStorageData(user?.email);
+        if (data) {
+            setFileSystem({ files: data.files || [], folders: data.folders || [] });
+        } else {
+            setFileSystem({ files: [], folders: [] });
+        }
+        setCurrentFolderId(null);
+        setCurrentView('files');
+    }, [user]);
+
 
     const [currentFolderId, setCurrentFolderId] = useState(null);
     const [currentView, setCurrentView] = useState('files');
@@ -17,10 +26,11 @@ export const FileSystemProvider = ({ children, apiKey }) => {
     const [previewFile, setPreviewFile] = useState(null);
 
     useEffect(() => {
-        const currentData = getStorageData() || { files: [], folders: [] };
-        console.log('FileSystemProvider saving to storage:', fileSystem);
-        saveStorageData({ ...currentData, files: fileSystem.files, folders: fileSystem.folders });
-    }, [fileSystem]);
+        if (fileSystem.files.length > 0 || fileSystem.folders.length > 0) {
+            saveStorageData(fileSystem, user?.email);
+        }
+    }, [fileSystem, user]);
+
 
     useEffect(() => {
         saveUserData(user);
