@@ -70,19 +70,28 @@ export const UploadModal = ({ isOpen, onClose }) => {
                         className="upload-dropzone"
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
-                        onClick={() => fileInputRef.current?.click()}
+                        style={{ position: 'relative' }}
                     >
+
                         <Upload size={48} className="upload-icon" />
                         <p className="upload-text">Drag and drop files here</p>
-                        <p className="upload-subtext">or click to browse</p>
+                        <p className="upload-subtext">or tap to browse</p>
                         <input
-                            ref={fileInputRef}
                             type="file"
                             multiple
-                            accept="*/*"
                             onChange={handleFileSelect}
-                            style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                opacity: 0,
+                                cursor: 'pointer',
+                                zIndex: 10,
+                                width: '100%',
+                                height: '100%'
+                            }}
+                            title="Choose files to upload"
                         />
+
 
                     </div>
 

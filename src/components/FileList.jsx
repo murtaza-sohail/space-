@@ -120,17 +120,11 @@ const FileList = () => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => isEmpty && currentView !== 'trash' && fileInputRef.current?.click()}
+                style={{ position: 'relative' }}
             >
 
-                <input
-                    type="file"
-                    multiple
-                    accept="*/*"
-                    ref={fileInputRef}
-                    onChange={handleFileSelect}
-                    style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-                />
+
+
 
 
                 {isEmpty ? (
@@ -142,12 +136,28 @@ const FileList = () => {
                                 <p>Items you delete will appear here</p>
                             </>
                         ) : (
-                            <div className="empty-upload-hint" onClick={() => fileInputRef.current?.click()}>
+                            <div className="empty-upload-hint">
+                                <input
+                                    type="file"
+                                    multiple
+                                    onChange={handleFileSelect}
+                                    style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        opacity: 0,
+                                        cursor: 'pointer',
+                                        zIndex: 10,
+                                        width: '100%',
+                                        height: '100%'
+                                    }}
+                                    title="Choose files to upload"
+                                />
                                 <FolderOpen size={64} className="empty-icon" />
                                 <h3>This folder is empty</h3>
                                 <p>Drag and drop files here or <strong>tap to upload</strong></p>
                             </div>
                         )}
+
 
                     </div>
                 ) : (
