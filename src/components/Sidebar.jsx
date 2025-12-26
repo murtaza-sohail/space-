@@ -73,7 +73,25 @@ const Sidebar = ({ setIsUploadOpen, setIsCreateFolderOpen, setIsLoginOpen, isOpe
                         <FolderPlus size={18} />
                         <span>Create Folder</span>
                     </button>
+
+                    <div className="sidebar-identity-section">
+                        {user ? (
+                            <div className="user-profile active">
+                                <img src={user.avatar} alt="Avatar" className="user-avatar" />
+                                <div className="user-info">
+                                    <span className="user-name">{user.name}</span>
+                                    <button className="logout-btn" onClick={logout}>Sign Out</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <button className="link-account-btn highlight" onClick={() => setIsLoginOpen(true)}>
+                                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" className="google-icon-micro" />
+                                <span>Link Google Account</span>
+                            </button>
+                        )}
+                    </div>
                 </div>
+
 
                 <div className="storage-info">
                     <div className="storage-watermark">{user ? 'CLOUD SYNC' : 'LOCAL ONLY'}</div>
@@ -93,22 +111,7 @@ const Sidebar = ({ setIsUploadOpen, setIsCreateFolderOpen, setIsLoginOpen, isOpe
                     )}
                 </div>
 
-                <div className="sidebar-footer">
-                    {user ? (
-                        <div className="user-profile">
-                            <img src={user.avatar} alt="Avatar" className="user-avatar" />
-                            <div className="user-info">
-                                <span className="user-name">{user.name}</span>
-                                <button className="logout-btn" onClick={logout}>Sign Out</button>
-                            </div>
-                        </div>
-                    ) : (
-                        <button className="link-account-btn" onClick={() => setIsLoginOpen(true)}>
-                            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" className="google-icon-micro" />
-                            <span>Link Google Account</span>
-                        </button>
-                    )}
-                </div>
+
             </aside>
         </>
     );
