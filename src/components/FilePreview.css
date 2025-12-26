@@ -226,22 +226,39 @@
         height: 100vh;
         max-height: 100vh;
         border-radius: 0;
+        background: black;
+        /* Solid black for focus on mobile */
     }
 
     .preview-header {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .preview-header .preview-actions button span {
+        display: none;
+        /* Hide button text on mobile */
     }
 
     .preview-title h2 {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .audio-player {
         min-width: auto;
-        width: 100%;
+        width: 90%;
+    }
+
+    .document-info h3 {
+        font-size: 1.1rem;
     }
 
     .document-info {
         max-width: 100%;
+        padding: var(--spacing-md);
     }
 }

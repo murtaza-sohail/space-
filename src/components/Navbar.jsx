@@ -1,9 +1,10 @@
 import React from 'react';
 import { useFileSystem } from '../hooks/useFileSystem';
-import { Search, ChevronRight, Home } from 'lucide-react';
+import { Search, ChevronRight, Home, Menu } from 'lucide-react';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ onToggleSidebar }) => {
+
     const { currentFolderId, fileSystem, searchQuery, setSearchQuery, navigateToFolder } = useFileSystem();
 
     // Build breadcrumb path
@@ -31,7 +32,11 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
+            <button className="mobile-menu-toggle" onClick={onToggleSidebar}>
+                <Menu size={24} />
+            </button>
             <div className="breadcrumb">
+
                 {breadcrumbs.map((crumb, index) => (
                     <React.Fragment key={crumb.id || 'root'}>
                         {index > 0 && <ChevronRight size={16} className="breadcrumb-separator" />}

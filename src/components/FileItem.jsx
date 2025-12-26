@@ -180,7 +180,7 @@ const FileItem = ({ item, isTrash = false, onPreview, onShare }) => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >
-            <div className="file-item-main" onClick={handleClick}>
+            <div className="file-item-main" onClick={handleClick} title={`Open ${item.name}`}>
                 {getIcon()}
                 <div className="file-item-info">
                     <div className="file-item-name-row">

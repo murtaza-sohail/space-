@@ -185,17 +185,44 @@
 
 @media (max-width: 768px) {
     .file-item {
-        padding: var(--spacing-sm) var(--spacing-md);
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+    }
+
+    .file-item-main {
+        gap: var(--spacing-sm);
+    }
+
+    .item-icon {
+        width: 32px;
+        height: 32px;
     }
 
     .file-item-name {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        max-width: 120px;
     }
 
     .file-item-meta {
-        font-size: 0.7rem;
+        display: none;
+        /* Hide date/size on very small list view to save space */
+    }
+
+    .file-item-actions {
+        gap: var(--spacing-xs);
+    }
+
+    .action-icon-btn {
+        padding: 6px;
+        /* Slightly larger hit area relative to item size */
+    }
+
+    .action-icon-btn svg {
+        width: 16px;
+        height: 16px;
     }
 }
+
 
 .action-icon-btn.active {
     color: var(--neon-cyan);

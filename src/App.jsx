@@ -14,6 +14,7 @@ function App() {
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
     const VIDEO_URL = "https://upsite.com.au/wp-content/uploads/pexels-rostislav-uzunov-5680034-1080p.mp4";
@@ -31,10 +32,12 @@ function App() {
                     setIsUploadOpen={setIsUploadOpen}
                     setIsCreateFolderOpen={setIsCreateFolderOpen}
                     setIsLoginOpen={setIsLoginOpen}
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
                 />
 
                 <main className="main-content">
-                    <Navbar />
+                    <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
                     <FileList />
                 </main>
             </div>
