@@ -79,9 +79,11 @@ export const UploadModal = ({ isOpen, onClose }) => {
                             ref={fileInputRef}
                             type="file"
                             multiple
+                            accept="*/*"
                             onChange={handleFileSelect}
-                            style={{ display: 'none' }}
+                            style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
                         />
+
                     </div>
 
                     {selectedFiles.length > 0 && (

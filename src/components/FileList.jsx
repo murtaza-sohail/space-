@@ -126,10 +126,12 @@ const FileList = () => {
                 <input
                     type="file"
                     multiple
+                    accept="*/*"
                     ref={fileInputRef}
                     onChange={handleFileSelect}
-                    style={{ display: 'none' }}
+                    style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
                 />
+
 
                 {isEmpty ? (
                     <div className="empty-state">
