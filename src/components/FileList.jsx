@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+
 import { useFileSystem } from '../hooks/useFileSystem';
 import FileItem from './FileItem';
 import FilePreview from './FilePreview';
@@ -22,6 +23,8 @@ const FileList = () => {
     const [viewMode, setViewMode] = useState('list'); // 'list' or 'grid'
     const [isDragOver, setIsDragOver] = useState(false);
     const [shareItemObject, setShareItemObject] = useState(null);
+    const fileInputRef = useRef(null);
+
 
 
     const isEmpty = currentItems.folders.length === 0 && currentItems.files.length === 0;
@@ -45,6 +48,12 @@ const FileList = () => {
         setIsDragOver(false);
 
         const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            handleFileUpload(files);
+        }
+    };
+
+    const handleFileUpload = async (files) => {
         const uploadedItems = await Promise.all(files.map(file => uploadFile(file)));
 
         // Auto-open the first uploaded file
@@ -52,6 +61,14 @@ const FileList = () => {
             setPreviewFile(uploadedItems[0]);
         }
     };
+
+    const handleFileSelect = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            handleFileUpload(files);
+        }
+    };
+
 
     const handleEmptyTrash = () => {
         if (confirm('Permanently delete all items from Trash? This cannot be undone.')) {
@@ -103,7 +120,17 @@ const FileList = () => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                onClick={() => isEmpty && currentView !== 'trash' && fileInputRef.current?.click()}
             >
+
+                <input
+                    type="file"
+                    multiple
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    style={{ display: 'none' }}
+                />
+
                 {isEmpty ? (
                     <div className="empty-state">
                         {currentView === 'trash' ? (
@@ -113,12 +140,13 @@ const FileList = () => {
                                 <p>Items you delete will appear here</p>
                             </>
                         ) : (
-                            <>
+                            <div className="empty-upload-hint" onClick={() => fileInputRef.current?.click()}>
                                 <FolderOpen size={64} className="empty-icon" />
                                 <h3>This folder is empty</h3>
-                                <p>Drag and drop files here or use the upload button</p>
-                            </>
+                                <p>Drag and drop files here or <strong>tap to upload</strong></p>
+                            </div>
                         )}
+
                     </div>
                 ) : (
                     <>
