@@ -12,11 +12,15 @@ import {
     Edit2,
     RotateCcw,
     XCircle,
-    FolderOpen
+    FolderOpen,
+    Share2,
+    Star
 } from 'lucide-react';
+
+
 import './FileItem.css';
 
-const FileItem = ({ item, isTrash = false, onPreview }) => {
+const FileItem = ({ item, isTrash = false, onPreview, onShare }) => {
     const {
         deleteItem,
         restoreItem,
@@ -24,8 +28,12 @@ const FileItem = ({ item, isTrash = false, onPreview }) => {
         renameItem,
         downloadFile,
         navigateToFolder,
-        moveItem
+        moveItem,
+        shareItem,
+        toggleStar
     } = useFileSystem();
+
+
 
     const [showMenu, setShowMenu] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -130,7 +138,23 @@ const FileItem = ({ item, isTrash = false, onPreview }) => {
         }
     };
 
+    const handleShare = (e) => {
+        e.stopPropagation();
+        if (onShare) {
+            onShare(item);
+        } else {
+            shareItem(item.id, item.type);
+        }
+    };
+
+    const handleToggleStar = (e) => {
+        e.stopPropagation();
+        toggleStar(item.id, item.type);
+    };
+
     const formatDate = (timestamp) => {
+
+
         return new Date(timestamp).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
@@ -159,61 +183,54 @@ const FileItem = ({ item, isTrash = false, onPreview }) => {
             <div className="file-item-main" onClick={handleClick}>
                 {getIcon()}
                 <div className="file-item-info">
-                    <span className="file-item-name">{item.name}</span>
+                    <div className="file-item-name-row">
+                        <span className="file-item-name">{item.name}</span>
+                        {item.isStarred && <Star size={14} className="starred-indicator" />}
+                        {item.isShared && <Share2 size={14} className="shared-indicator" />}
+                    </div>
+
                     <span className="file-item-meta">
                         {formatDate(item.createdAt)} • {formatSize(item.size)}
                     </span>
                 </div>
+
             </div>
 
-            <div className="file-item-actions">
-                <button
-                    className="action-menu-btn"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMenu(!showMenu);
-                    }}
-                >
-                    <MoreVertical size={18} />
-                </button>
-
-                {showMenu && (
+            <div className="file-item-actions permanent-actions">
+                {isTrash ? (
                     <>
-                        <div className="menu-backdrop" onClick={() => setShowMenu(false)} />
-                        <div className="action-menu">
-                            {isTrash ? (
-                                <>
-                                    <button onClick={handleRestore} className="menu-item restore">
-                                        <RotateCcw size={16} />
-                                        <span>Restore</span>
-                                    </button>
-                                    <button onClick={handleDelete} className="menu-item delete">
-                                        <XCircle size={16} />
-                                        <span>Delete Forever</span>
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    {!isFolder && (
-                                        <button onClick={handleDownload} className="menu-item">
-                                            <Download size={16} />
-                                            <span>Download</span>
-                                        </button>
-                                    )}
-                                    <button onClick={handleRename} className="menu-item">
-                                        <Edit2 size={16} />
-                                        <span>Rename</span>
-                                    </button>
-                                    <button onClick={handleDelete} className="menu-item delete">
-                                        <Trash2 size={16} />
-                                        <span>Move to Trash</span>
-                                    </button>
-                                </>
-                            )}
-                        </div>
+                        <button onClick={handleRestore} className="action-icon-btn restore" title="Restore">
+                            <RotateCcw size={18} />
+                        </button>
+                        <button onClick={handleDelete} className="action-icon-btn delete" title="Delete Permanently">
+                            <XCircle size={18} />
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        {!isFolder && (
+                            <button onClick={handleDownload} className="action-icon-btn" title="Download">
+                                <Download size={18} />
+                            </button>
+                        )}
+                        <button onClick={handleShare} className={`action-icon-btn ${item.isShared ? 'active' : ''}`} title="Share">
+                            <Share2 size={18} />
+                        </button>
+                        <button onClick={handleToggleStar} className={`action-icon-btn ${item.isStarred ? 'active' : ''}`} title="Star">
+                            <Star size={18} fill={item.isStarred ? "currentColor" : "none"} />
+                        </button>
+                        <button onClick={handleRename} className="action-icon-btn" title="Rename">
+
+                            <Edit2 size={18} />
+                        </button>
+
+                        <button onClick={handleDelete} className="action-icon-btn delete" title="Move to Trash">
+                            <Trash2 size={18} />
+                        </button>
                     </>
                 )}
             </div>
+
         </div>
     );
 };

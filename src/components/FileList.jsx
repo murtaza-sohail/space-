@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useFileSystem } from '../hooks/useFileSystem';
 import FileItem from './FileItem';
 import FilePreview from './FilePreview';
-import { Grid, List, FolderOpen, FileX } from 'lucide-react';
+import { ShareModal } from './ShareModal';
+import { Grid, List, FolderOpen, FileX, Trash2 } from 'lucide-react';
+
+
 import './FileList.css';
 
 const FileList = () => {
@@ -12,10 +15,14 @@ const FileList = () => {
         uploadFile,
         downloadFile,
         previewFile,
-        setPreviewFile
+        setPreviewFile,
+        emptyTrash
     } = useFileSystem();
+
     const [viewMode, setViewMode] = useState('list'); // 'list' or 'grid'
     const [isDragOver, setIsDragOver] = useState(false);
+    const [shareItemObject, setShareItemObject] = useState(null);
+
 
     const isEmpty = currentItems.folders.length === 0 && currentItems.files.length === 0;
 
@@ -46,11 +53,20 @@ const FileList = () => {
         }
     };
 
+    const handleEmptyTrash = () => {
+        if (confirm('Permanently delete all items from Trash? This cannot be undone.')) {
+            emptyTrash();
+        }
+    };
+
     return (
+
         <div className="file-list-container">
             <div className="file-list-header">
                 <h2 className="file-list-title">
-                    {currentView === 'trash' ? 'Trash' : 'Files'}
+                    {currentView === 'trash' ? 'Trash' :
+                        currentView === 'recent' ? 'Recent' :
+                            currentView === 'starred' ? 'Starred' : 'Files'}
                 </h2>
                 <div className="view-controls">
                     <button
@@ -67,7 +83,19 @@ const FileList = () => {
                     >
                         <Grid size={18} />
                     </button>
+
+                    {currentView === 'trash' && !isEmpty && (
+                        <button
+                            className="empty-trash-btn"
+                            onClick={handleEmptyTrash}
+                            title="Empty Trash"
+                        >
+                            <Trash2 size={18} />
+                            <span>Empty Trash</span>
+                        </button>
+                    )}
                 </div>
+
             </div>
 
             <div
@@ -99,7 +127,9 @@ const FileList = () => {
                                 key={folder.id}
                                 item={folder}
                                 isTrash={currentView === 'trash'}
+                                onShare={(sharedItem) => setShareItemObject(sharedItem)}
                             />
+
                         ))}
                         {currentItems.files.map(file => (
                             <FileItem
@@ -107,7 +137,9 @@ const FileList = () => {
                                 item={file}
                                 isTrash={currentView === 'trash'}
                                 onPreview={setPreviewFile}
+                                onShare={(sharedItem) => setShareItemObject(sharedItem)}
                             />
+
                         ))}
                     </>
                 )}
@@ -128,7 +160,14 @@ const FileList = () => {
                 onClose={() => setPreviewFile(null)}
                 onDownload={downloadFile}
             />
+
+            <ShareModal
+                isOpen={!!shareItemObject}
+                onClose={() => setShareItemObject(null)}
+                item={shareItemObject}
+            />
         </div>
+
     );
 };
 

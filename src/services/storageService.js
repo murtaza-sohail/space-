@@ -23,8 +23,17 @@ export const getStorageData = () => {
 };
 
 export const saveStorageData = (data) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        console.log('Storage saved successfully:', data);
+    } catch (e) {
+        console.error('Failed to save to localStorage:', e);
+        if (e.name === 'QuotaExceededError') {
+            console.warn('LocalStorage quota exceeded. Data may not be fully persisted.');
+        }
+    }
 };
+
 
 export const formatBytes = (bytes, decimals = 2) => {
     if (bytes === 0) return '0 Bytes';
@@ -47,3 +56,19 @@ export const calculateUsedStorage = (files) => {
 export const getStoragePercentage = (used) => {
     return (used / TOTAL_STORAGE) * 100;
 };
+
+const USER_KEY = 'cloudvault_user';
+
+export const getUserData = () => {
+    const data = localStorage.getItem(USER_KEY);
+    return data ? JSON.parse(data) : null;
+};
+
+export const saveUserData = (userData) => {
+    if (userData) {
+        localStorage.setItem(USER_KEY, JSON.stringify(userData));
+    } else {
+        localStorage.removeItem(USER_KEY);
+    }
+};
+

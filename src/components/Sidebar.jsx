@@ -1,19 +1,16 @@
 import React from 'react';
 import { useFileSystem } from '../hooks/useFileSystem';
 import { formatBytes, getStoragePercentage } from '../services/storageService';
-import { Cloud, Home, Trash2, Upload, FolderPlus } from 'lucide-react';
+import { Cloud, Home, Trash2, Upload, FolderPlus, Clock, Star } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = ({ setIsUploadOpen }) => {
-    const { usedStorage, currentView, setCurrentView, createFolder, navigateToFolder } = useFileSystem();
+const Sidebar = ({ setIsUploadOpen, setIsCreateFolderOpen, setIsLoginOpen }) => {
+    const { usedStorage, currentView, setCurrentView, navigateToFolder, user, logout } = useFileSystem();
     const TOTAL_STORAGE = 10000 * 1024 * 1024 * 1024 * 1024;
     const percentage = getStoragePercentage(usedStorage);
 
     const handleCreateFolder = () => {
-        const name = prompt('Enter folder name:');
-        if (name && name.trim()) {
-            createFolder(name.trim());
-        }
+        setIsCreateFolderOpen(true);
     };
 
     const handleNavToHome = () => {
@@ -37,6 +34,22 @@ const Sidebar = ({ setIsUploadOpen }) => {
                 </button>
 
                 <button
+                    className={`nav-item ${currentView === 'recent' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('recent')}
+                >
+                    <Clock size={20} />
+                    <span>Recent</span>
+                </button>
+
+                <button
+                    className={`nav-item ${currentView === 'starred' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('starred')}
+                >
+                    <Star size={20} />
+                    <span>Starred</span>
+                </button>
+
+                <button
                     className={`nav-item ${currentView === 'trash' ? 'active' : ''}`}
                     onClick={() => setCurrentView('trash')}
                 >
@@ -44,6 +57,7 @@ const Sidebar = ({ setIsUploadOpen }) => {
                     <span>Trash</span>
                 </button>
             </div>
+
 
             <div className="sidebar-actions">
                 <button className="action-btn primary" onClick={() => setIsUploadOpen(true)}>
@@ -58,7 +72,7 @@ const Sidebar = ({ setIsUploadOpen }) => {
             </div>
 
             <div className="storage-info">
-                <div className="storage-watermark">SECURED</div>
+                <div className="storage-watermark">{user ? 'CLOUD SYNC' : 'LOCAL ONLY'}</div>
                 <div className="storage-header">
                     <span className="storage-label">Storage</span>
                     <span className="storage-used">{formatBytes(usedStorage)}</span>
@@ -67,9 +81,33 @@ const Sidebar = ({ setIsUploadOpen }) => {
                     <div className="storage-fill" style={{ width: `${percentage}%` }}></div>
                 </div>
                 <div className="storage-total">{formatBytes(TOTAL_STORAGE)} Total</div>
+                {user && (
+                    <div className="sync-status active">
+                        <Cloud size={14} />
+                        <span>Synced to Google Storage: {user.email}</span>
+                    </div>
+                )}
+            </div>
+
+            <div className="sidebar-footer">
+                {user ? (
+                    <div className="user-profile">
+                        <img src={user.avatar} alt="Avatar" className="user-avatar" />
+                        <div className="user-info">
+                            <span className="user-name">{user.name}</span>
+                            <button className="logout-btn" onClick={logout}>Sign Out</button>
+                        </div>
+                    </div>
+                ) : (
+                    <button className="link-account-btn" onClick={() => setIsLoginOpen(true)}>
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" className="google-icon-micro" />
+                        <span>Link Google Account</span>
+                    </button>
+                )}
             </div>
         </aside>
     );
 };
+
 
 export default Sidebar;

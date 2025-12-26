@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { FileSystemContext } from './FileSystemContext';
-import { initStorage, getStorageData, saveStorageData, calculateUsedStorage } from '../services/storageService';
+import { initStorage, getStorageData, saveStorageData, calculateUsedStorage, getUserData, saveUserData } from '../services/storageService';
 import { v4 as uuidv4 } from 'uuid';
 
 export const FileSystemProvider = ({ children, apiKey }) => {
+    const [user, setUser] = useState(() => getUserData());
     const [fileSystem, setFileSystem] = useState(() => {
         initStorage(apiKey);
         const data = getStorageData();
@@ -16,11 +17,31 @@ export const FileSystemProvider = ({ children, apiKey }) => {
     const [previewFile, setPreviewFile] = useState(null);
 
     useEffect(() => {
-        const currentData = getStorageData();
-        if (currentData) {
-            saveStorageData({ ...currentData, files: fileSystem.files, folders: fileSystem.folders });
-        }
+        const currentData = getStorageData() || { files: [], folders: [] };
+        console.log('FileSystemProvider saving to storage:', fileSystem);
+        saveStorageData({ ...currentData, files: fileSystem.files, folders: fileSystem.folders });
     }, [fileSystem]);
+
+    useEffect(() => {
+        saveUserData(user);
+    }, [user]);
+
+    const loginWithGoogle = useCallback((email) => {
+        const newUser = {
+            email,
+            name: email.split('@')[0],
+            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+            linkedAt: Date.now()
+        };
+        setUser(newUser);
+        return newUser;
+    }, []);
+
+    const logout = useCallback(() => {
+        setUser(null);
+    }, []);
+
+
 
     const createFolder = useCallback((name) => {
         const newFolder = {
@@ -29,6 +50,7 @@ export const FileSystemProvider = ({ children, apiKey }) => {
             name,
             type: 'folder',
             createdAt: Date.now(),
+            lastModified: Date.now(),
             isTrashed: false,
         };
         setFileSystem(prev => ({ ...prev, folders: [...prev.folders, newFolder] }));
@@ -106,6 +128,14 @@ export const FileSystemProvider = ({ children, apiKey }) => {
         }
     }, []);
 
+    const emptyTrash = useCallback(() => {
+        setFileSystem(prev => ({
+            ...prev,
+            folders: prev.folders.filter(f => !f.isTrashed),
+            files: prev.files.filter(f => !f.isTrashed)
+        }));
+    }, []);
+
     const renameItem = useCallback((id, type, newName) => {
         if (type === 'folder') {
             setFileSystem(prev => ({
@@ -136,9 +166,44 @@ export const FileSystemProvider = ({ children, apiKey }) => {
         }
     }, []);
 
+    const shareItem = useCallback((itemId, itemType) => {
+        if (itemType === 'folder') {
+            setFileSystem(prev => ({
+                ...prev,
+                folders: prev.folders.map(f => f.id === itemId ? { ...f, isShared: !f.isShared } : f)
+            }));
+        } else {
+            setFileSystem(prev => ({
+                ...prev,
+                files: prev.files.map(f => f.id === itemId ? { ...f, isShared: !f.isShared } : f)
+            }));
+        }
+    }, []);
+
+    const toggleStar = useCallback((itemId, itemType) => {
+        if (itemType === 'folder') {
+            setFileSystem(prev => ({
+                ...prev,
+                folders: prev.folders.map(f => f.id === itemId ? { ...f, isStarred: !f.isStarred } : f)
+            }));
+        } else {
+            setFileSystem(prev => ({
+                ...prev,
+                files: prev.files.map(f => f.id === itemId ? { ...f, isStarred: !f.isStarred } : f)
+            }));
+        }
+    }, []);
+
     const navigateToFolder = useCallback((folderId) => {
         setCurrentView('files');
         setCurrentFolderId(folderId);
+        // Track folder access for Recent view
+        if (folderId) {
+            setFileSystem(prev => ({
+                ...prev,
+                folders: prev.folders.map(f => f.id === folderId ? { ...f, lastModified: Date.now() } : f)
+            }));
+        }
     }, []);
 
     const navigateUp = useCallback(() => {
@@ -168,6 +233,25 @@ export const FileSystemProvider = ({ children, apiKey }) => {
             return {
                 folders: fileSystem.folders.filter(f => f.isTrashed),
                 files: fileSystem.files.filter(f => f.isTrashed)
+            };
+        }
+
+        if (currentView === 'starred') {
+            return {
+                folders: fileSystem.folders.filter(f => f.isStarred && !f.isTrashed),
+                files: fileSystem.files.filter(f => f.isStarred && !f.isTrashed)
+            };
+        }
+
+        if (currentView === 'recent') {
+            const allItems = [
+                ...fileSystem.folders.filter(f => !f.isTrashed && f.lastModified),
+                ...fileSystem.files.filter(f => !f.isTrashed && f.lastModified)
+            ].sort((a, b) => b.lastModified - a.lastModified).slice(0, 20);
+
+            return {
+                folders: allItems.filter(i => i.type === 'folder'),
+                files: allItems.filter(i => i.type !== 'folder')
             };
         }
 
@@ -201,12 +285,19 @@ export const FileSystemProvider = ({ children, apiKey }) => {
         deleteItem,
         restoreItem,
         permanentDelete,
+        emptyTrash,
         renameItem,
         moveItem,
         navigateToFolder,
         navigateUp,
-        downloadFile
+        downloadFile,
+        shareItem,
+        toggleStar,
+        user,
+        loginWithGoogle,
+        logout
     };
+
 
     return (
         <FileSystemContext.Provider value={value}>

@@ -82,6 +82,14 @@
     box-shadow: 0 0 10px var(--neon-cyan);
 }
 
+.preview-btn.active {
+    background: rgba(0, 243, 255, 0.2);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+
 .preview-btn.close:hover {
     background: rgba(255, 49, 49, 0.2);
     border-color: var(--error);

@@ -185,3 +185,65 @@ export const CreateFolderModal = ({ isOpen, onClose }) => {
         </div>
     );
 };
+export const GoogleLoginModal = ({ isOpen, onClose }) => {
+    const { loginWithGoogle } = useFileSystem();
+    const [email, setEmail] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        if (email.trim() && email.includes('@')) {
+            setIsLoggingIn(true);
+            setTimeout(() => {
+                loginWithGoogle(email.trim());
+                setIsLoggingIn(false);
+                onClose();
+            }, 2000);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal-backdrop" onClick={onClose}>
+            <div className="modal modal-small" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Link Google Account</h2>
+                    <button className="close-btn" onClick={onClose}>
+                        <X size={24} />
+                    </button>
+                </div>
+
+                <div className="modal-body">
+                    {isLoggingIn ? (
+                        <div className="login-loading">
+                            <div className="neon-spinner"></div>
+                            <p>Authenticating with Neural Network...</p>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleLogin} className="login-form">
+                            <p className="login-hint">Enter your Google email to sync with CloudVault</p>
+                            <input
+                                type="email"
+                                className="folder-input"
+                                placeholder="name@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                autoFocus
+                            />
+                            <button
+                                type="submit"
+                                className="btn btn-primary google-btn"
+                                disabled={!email.trim() || !email.includes('@')}
+                            >
+                                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" className="google-icon-small" />
+                                <span>Sign in with Google</span>
+                            </button>
+                        </form>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};

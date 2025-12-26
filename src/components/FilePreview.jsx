@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { X, Download, Maximize2 } from 'lucide-react';
+import { X, Download, Maximize2, Share2 } from 'lucide-react';
+import { useFileSystem } from '../hooks/useFileSystem';
+
 import './FilePreview.css';
 
 const FilePreview = ({ file, isOpen, onClose, onDownload }) => {
+    const { shareItem } = useFileSystem();
     const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const handleShare = () => {
+        shareItem(file.id, file.type);
+    };
+
 
     const handleDownload = () => {
         if (onDownload) {
@@ -118,6 +126,14 @@ const FilePreview = ({ file, isOpen, onClose, onDownload }) => {
                                 <Maximize2 size={20} />
                             </button>
                         )}
+                        <button
+                            className={`preview-btn ${file.isShared ? 'active' : ''}`}
+                            onClick={handleShare}
+                            title="Share"
+                        >
+                            <Share2 size={20} />
+                        </button>
+
                         <button
                             className="preview-btn"
                             onClick={handleDownload}
